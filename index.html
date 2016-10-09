@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<html lang="en"  ng-app="algoApp">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>interval cover</title>
+
+    <link rel="icon" href="favicon.ico">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="main.css" />
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<!--[if lt IE 7]>
+<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="content container" ng-controller="IntervalCoverController">
+
+    <h1>Optimal Cover Algorithm</h1>
+    <p><i>By Aditeya, Clara, Supreja and Micha</i></p>
+
+    <a class="btn btn-default create-random" ng-click="createNewRandom()" href><span class="glyphicon glyphicon-refresh"></span> Create random Intervals</a>
+    <div class="create-specific">
+        Or Enter Your Own <input class="form-control" type="text" ng-model="userIntervals" placeholder="0-0.3; 0.1-0.5; 0.2-1.1" style="width: 280px"/>
+        <a href class="btn btn-default submit" ng-click="createNewSpecific()"><span class="glyphicon glyphicon-play"></span> Go</a>
+    </div>
+
+    <table class="table">
+        <thead>
+            <th>Start</th>
+            <th>End</th>
+            <th>In Our Cover</th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="interval in intervals">
+                <td>{{interval.start | number}}</td>
+                <td>{{interval.end | number}}</td>
+                <td>
+                    <span ng-show="interval.inSchwabCover">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </span>
+                    <span ng-show="!interval.inSchwabCover">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    Maximum Possible Coverage with {{intervals.length}}/{{intervals.length}} intervals: <b>{{maxCoverage | number}}</b><br />
+    Our Coverage with {{schwabCover.length}}/{{intervals.length}} intervals: <b>{{schwabCoverage | number}}</b>
+
+
+    <h2>Code</h2>
+    <pre>
+var cover = [];
+var intervalsSorted = me.sortIntervals($scope.intervals);
+
+for(var k = 0; k < intervalsSorted.length; k++)
+{
+    if(me.addsToCoverage(cover, intervalsSorted[k]))
+    {
+        cover.push(intervalsSorted[k]);
+    }
+}
+
+for(var j = 0; j < cover.length; j++)
+{
+    var interval = cover[j];
+
+    var coverWithout = angular.copy(cover).filter(function(c) { return !me.isSameInterval(c, interval) && !c.isRemoved; });
+    if(!me.addsToCoverage(coverWithout, interval))
+    {
+        interval.isRemoved = true;
+    }
+}
+
+return cover.filter(function(c) { return !c.isRemoved; });</pre>
+
+    <h3>Helper Functions</h3>
+
+    <pre>
+me.addsToCoverage = function(cover, interval)
+{
+    var coverage1 = me.computeCoverage(cover);
+    var coverage2 = me.computeCoverage(cover.concat(interval));
+
+    return coverage2 > coverage1;
+};
+
+me.computeCoverage = function(cover)
+{
+    var intervalsSorted = me.sortIntervals(cover);
+    var coverage = 0;
+    var lastEnd = 0;
+
+    for(var k = 0; k < intervalsSorted.length; k++)
+    {
+        var interval = intervalsSorted[k];
+
+        if(interval.end < 0 || interval.start > 1) continue;
+
+        if(interval.start < lastEnd)
+        {
+            interval.start = lastEnd;
+        }
+        if(interval.end > 1)
+        {
+            interval.end = 1;
+        }
+
+        var diff = interval.end - interval.start;
+
+        if(diff < 0) continue;
+
+        lastEnd = interval.end;
+        coverage += diff;
+    }
+
+    return coverage;
+};</pre>
+
+</div><!-- /.container -->
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!--<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>-->
+<!--<script src="https://apis.google.com/js/client.js"></script>-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/d3-path.v1.min.js"></script>
+<script src="https://d3js.org/d3-shape.v1.min.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>

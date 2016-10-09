@@ -1,0 +1,21 @@
+
+.content {
+    position: relative;
+}
+.create-random {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+}
+.create-specific {
+    position: absolute;
+    width: 30%;
+    top: 50px;
+    right: 10px;
+}
+
+.create-specific .submit {
+    position: absolute;
+    top: 20px;
+    right: 0;
+}
