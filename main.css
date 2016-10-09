@@ -19,3 +19,21 @@
     top: 20px;
     right: 0;
 }
+
+.interval {
+    position: absolute;
+    top:2px;
+    height: 30px;
+}
+.interval.cover-true {
+    background: #0f0;
+}
+.interval.cover-false {
+    background: #f00;
+}
+.interval.interval-example {
+    background: #ccc;
+}
+tr.example {
+    background: #eee;
+}
