@@ -37,3 +37,9 @@
 tr.example {
     background: #eee;
 }
+
+.graphCol {
+    position: relative;
+    border-left: 1px dashed #333;
+    border-right: 1px dashed #333;
+}

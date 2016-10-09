@@ -47,21 +47,14 @@
 
     <table class="table">
         <thead>
-            <th style="width:15%">Start</th>
-            <th style="width:15%">End</th>
-            <th style="width:15%">In Our Cover</th>
-            <th style="width:55%">Graph</th>
+            <th style="width: 150px">Start</th>
+            <th style="width: 150px">End</th>
+            <th style="width: 140px">In Our Cover</th>
+            <th style="width: 100px;"></th>
+            <th style="width: 500px">Graph</th>
+            <th style="width: 100px;"></th>
         </thead>
         <tbody>
-            <tr class="example">
-                <td>0</td>
-                <td>1</td>
-                <td>- </td>
-                <td style="position:relative"><div class="interval interval-example"
-                                                   style="left:0px; width: 500px">
-
-                </div></td>
-            </tr>
             <tr ng-repeat="interval in intervals">
                 <td>{{interval.start | number}}</td>
                 <td>{{interval.end | number}}</td>
@@ -73,10 +66,12 @@
                         <span class="glyphicon glyphicon-remove"></span>
                     </span>
                 </td>
-                <td style="position:relative"><div class="interval cover-{{interval.inSchwabCover}}"
+                <td></td>
+                <td class="graphCol"><div class="interval cover-{{interval.inSchwabCover}}"
                     style="left:{{interval.start*500}}px; width: {{(interval.end-interval.start)*500}}px">
 
                 </div></td>
+                <td></td>
             </tr>
         </tbody>
     </table>
